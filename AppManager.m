@@ -5,12 +5,59 @@
 @implementation AppManager
 
 -(void)awakeFromNib{
+
+    [window center];
+    [window setReleasedWhenClosed:NO];
+        
     // Set Monaco font
     [textField setTypingAttributes: 
     	[NSDictionary dictionaryWithObject:
         	[NSFont fontWithName:@"Monaco" size:11.0] forKey:NSFontAttributeName
      	]
     ];
+}
+
+// Redisplay the window after close and click on the dock icon
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+    [window makeKeyAndOrderFront: (id) theApplication];
+    return flag;
+}
+
+// Do something if the app becomes active
+- (void) applicationWillBecomeActive:(NSNotification *)note{
+ 	//NSBeep();   
+}
+
+// Open file dialog and load the text into the select box
+- (IBAction)openDocument:(id)sender{
+    int i; // Loop counter.
+    
+    // Create the File Open Dialog class.
+    NSOpenPanel* openDlg = [NSOpenPanel openPanel];
+    
+    // Enable the selection of files in the dialog.
+    [openDlg setCanChooseFiles:YES];
+    
+    // Enable the selection of directories in the dialog.
+    [openDlg setCanChooseDirectories:NO];
+    
+    // Display the dialog.  If the OK button was pressed,
+    // process the files.
+    if ( [openDlg runModalForDirectory:nil file:nil] == NSOKButton )
+    {
+        // Get an array containing the full filenames of all
+        // files and directories selected.
+        NSArray* files = [openDlg filenames];
+        
+        // Loop through all the files and process them.
+        for( i = 0; i < [files count]; i++ )
+        {
+            NSString* fileName = [files objectAtIndex:i];
+            NSString* content = [[NSString alloc] initWithContentsOfFile:fileName];
+            [textField setString:content];
+        }
+    }
 }
 
 - (IBAction)clickOpen:(NSButton*)sender {
