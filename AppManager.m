@@ -56,6 +56,7 @@
             NSString* fileName = [files objectAtIndex:i];
             NSString* content = [[NSString alloc] initWithContentsOfFile:fileName];
             [textField setString:content];
+            [content release];
         }
     }
 }
@@ -91,6 +92,7 @@
         // Post content aufbauen
         NSString* postContent = @"content=";
         postContent = [postContent stringByAppendingString: encodedString];
+        [encodedString release];
                 
         // Request aufbauen und senden
         ASIFormDataRequest *request = [[[ASIFormDataRequest alloc] initWithURL:url] autorelease];
