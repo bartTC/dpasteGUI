@@ -78,41 +78,29 @@
         
         // API Basepoint
         NSURL *url = [NSURL URLWithString:@"http://dpaste.de/api/"];
-
-        // POST-Content urlencoden
-        // @see http://simonwoodside.com/weblog/2009/4/22/how_to_really_url_encode/
-        NSString* encodedString = (NSString * )CFURLCreateStringByAddingPercentEscapes(
-            NULL,
-            (CFStringRef) [textField string],
-            NULL,
-            (CFStringRef) @"!*'();:@&=+$,/?%#[]",
-            kCFStringEncodingUTF8
-    	);
-                                                                                    
-        // Post content aufbauen
-        NSString* postContent = @"content=";
-        postContent = [postContent stringByAppendingString: encodedString];
-        [encodedString release];
                 
         // Request aufbauen und senden
         ASIFormDataRequest *request = [[[ASIFormDataRequest alloc] initWithURL:url] autorelease];
         [request addRequestHeader:@"User-Agent" value:@"dpasteGUI"];
+        [request addRequestHeader:@"Content-Type" value:@"application/json"];
         [request setAllowCompressedResponse: (BOOL) YES];        
-        [request setPostBody: [postContent dataUsingEncoding:NSUTF8StringEncoding]];
-        [request start];
+        [request setPostValue:[textField string] forKey:@"content"];
+        [request startSynchronous];
                 
-        // Response
-        NSError *error = [request error];        
-        if (!error) {
+        if (![request error]) {
             // Url aus dem response auslesen und Anführungszeichen entfernen (piston bug?)
-            NSString *response = [[request responseString] stringByReplacingOccurrencesOfString:@"\"" withString:@""];            
-            [urlLabel setStringValue:response];
-            [urlLabel selectText: (id) sender];
+            NSString *response = [[request responseString] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
             
-            // Open Button aktivieren
-            [clickOpenButton setEnabled: (BOOL) YES];
+            if(response) {
+                [urlLabel setStringValue:response];
+                [urlLabel selectText: (id) sender];
+                [clickOpenButton setEnabled: (BOOL) YES];
+            } else {
+                [urlLabel setStringValue: @"Response Error of the API"];
+            }
+            
         }else{
-            [urlLabel setStringValue: @"Request/Response Error with the API"];
+            [urlLabel setStringValue: @"Request/Response Error of the API"];
         }
         
 	}else{
