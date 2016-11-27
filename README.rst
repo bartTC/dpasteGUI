@@ -5,4 +5,7 @@ dpasteGUI
 A simple graphical interface to quickly post snippets to the dpaste.de_
 pastebin.
 
-Download the latest compiled version on the Github Page: http://barttc.github.com/dpasteGUI
+.. image:: http://d.pr/i/La39.png
+
+
+Download the latest compiled version from the Release page: https://github.com/bartTC/dpasteGUI/releases
