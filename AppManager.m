@@ -77,7 +77,7 @@
     if([[textField string] length] > 0){
         
         // API Basepoint
-        NSURL *url = [NSURL URLWithString:@"http://dpaste.de/api/"];
+        NSURL *url = [NSURL URLWithString:@"https://dpaste.de/api/"];
                 
         // Request aufbauen und senden
         ASIFormDataRequest *request = [[[ASIFormDataRequest alloc] initWithURL:url] autorelease];
